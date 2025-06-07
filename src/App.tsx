@@ -2,24 +2,25 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useNavigate,
+  Navigate,
 } from "react-router-dom";
 import AuthPage from "./pages/auth/AuthPage";
 import HomePage from "./pages/home/HomePage";
-import { useEffect } from "react";
+
+function AppContent() {
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/auth" replace />} />
+      <Route path="/home" element={<HomePage />} />
+      <Route path="/auth" element={<AuthPage />} />
+    </Routes>
+  );
+}
 
 export default function App() {
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate("/auth");
-  }, [navigate]);
-
   return (
     <Router>
-      <Routes>
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/auth" element={<AuthPage />} />
-      </Routes>
+      <AppContent />
     </Router>
   );
 }
