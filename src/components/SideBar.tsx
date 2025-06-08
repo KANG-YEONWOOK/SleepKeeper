@@ -37,7 +37,7 @@ export default function SideBar({ isOpen, onClose }: SideBarProps) {
             <button
               className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200 flex items-center"
               onClick={() => {
-                // TODO: 피드백 달력 페이지로 이동
+                navigate('/feedback-calander');
                 onClose();
               }}
             >

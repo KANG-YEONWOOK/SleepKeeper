@@ -37,19 +37,17 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* 사이드바 */}
       <SideBar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      {/* 메인 컨텐츠 영역 */}
       <main className="pt-16 px-4">
-        {/* 환영 메시지 */}
-        <div className="mt-6">
+
+        <div className="flex flex-row items-center mt-6">
+          <img src="/sleepface.svg" alt="Sleep Face" className="w-12 h-12 mr-2" />
           <h1 className="text-white text-xl font-bold">
-            {user?.name}님, 오늘도 숙면하세요!
+            {user?.name}님의 숙면을 지켜드려요!
           </h1>
         </div>
 
-        {/* 최근 수면 데이터 영역 */}
         <div className="mt-8">
           <h2 className="text-white text-lg font-semibold text-center mb-4">
             최근 수면 데이터
