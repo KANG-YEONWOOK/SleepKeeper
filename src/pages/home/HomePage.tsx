@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import sleepKeeperLogo from '../../../public/sleepkeeperLogo.png';
 import SideBar from '../../components/SideBar';
 import { useAuthStore } from '../../store/authStore';
 
@@ -28,7 +27,7 @@ export default function HomePage() {
 
           <div className="absolute left-1/2 transform -translate-x-1/2">
             <img
-              src={sleepKeeperLogo}
+              src="/sleepkeeperLogo.png"
               alt="Sleep Keeper Logo"
               className="w-12 h-12"
             />
@@ -46,7 +45,7 @@ export default function HomePage() {
         {/* 환영 메시지 */}
         <div className="mt-6">
           <h1 className="text-white text-xl font-bold">
-            {user?.email}님, 오늘도 숙면하세요!
+            {user?.name}님, 오늘도 숙면하세요!
           </h1>
         </div>
 
