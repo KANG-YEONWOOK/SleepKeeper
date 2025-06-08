@@ -164,7 +164,7 @@ export default function AuthPage() {
         message={errorModal.message}
         onClose={() => setErrorModal({ isOpen: false, message: '' })}
       />
-      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8">
+      <div className="w-full max-w-md space-y-8 rounded-lg bg-white m-6 p-8">
         <img src="/sleepkeeperLogo.png" alt="Sleep Keeper Logo" className="w-32 h-32 mx-auto" />
         <div className="text-center">
           <h2 className="mt-2 text-3xl font-bold text-gray-900" style={{ color: '#223A61' }}>

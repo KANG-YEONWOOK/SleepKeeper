@@ -9,6 +9,7 @@ import HomePage from "./pages/home/HomePage";
 import FeedbackCalander from "./pages/feedbackCalander/FeedbackCalander";
 import ErrorPage from "./pages/error/ErrorPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SleepOptimizer from "./pages/sleepOptimizer/sleepOptimizer";
 
 function AppContent() {
   return (
@@ -28,6 +29,14 @@ function AppContent() {
         element={
           <ProtectedRoute>
             <FeedbackCalander />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/sleep-optimizer"
+        element={
+          <ProtectedRoute>
+            <SleepOptimizer />
           </ProtectedRoute>
         }
       />

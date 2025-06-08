@@ -1,0 +1,119 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #223A61;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.summary-section, .detail-section {
+  margin-bottom: 30px;
+}
+
+.summary-section h3, .detail-section h3 {
+  color: #223A61;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.summary-item {
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.level-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.level-details {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-item {
+  border: 1px solid;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-item .time {
+  font-weight: 500;
+  color: #223A61;
+}
+
+.detail-item .level {
+  font-weight: 500;
+}
+
+.detail-item .duration {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  color: #991B1B;
+  font-size: 1.1rem;
+  font-weight: 800;
+} 
