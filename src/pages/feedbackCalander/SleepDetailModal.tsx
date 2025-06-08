@@ -1,17 +1,5 @@
 import './SleepDetailModal.css';
 
-interface SleepSummary {
-  level: string;
-  count: number;
-  minutes: number;
-}
-
-interface SleepDetail {
-  start_time: string;
-  level: string;
-  duration_sec: number;
-}
-
 interface SleepDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -29,7 +17,7 @@ interface SleepDetailModalProps {
   error?: string;
 }
 
-export default function SleepDetailModal({ isOpen, onClose, sleepId, summary, detail, error }: SleepDetailModalProps) {
+export default function SleepDetailModal({ isOpen, onClose, summary, detail, error }: SleepDetailModalProps) {
   if (!isOpen) return null;
 
   const getLevelColor = (level: string) => {
