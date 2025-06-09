@@ -57,11 +57,10 @@ export default function FitbitLoginButton() {
     // URL 파라미터에서 성공/실패 여부 확인
     const urlParams = new URLSearchParams(window.location.search);
     const status = urlParams.get('status');
-    const message = urlParams.get('message');
 
-    if (status && message) {
+    if (status) {
       setIsSuccess(status.includes('success'));
-      setModalMessage(message);
+      setModalMessage(status.includes('success') ? 'Fitbit 계정이 성공적으로 연동되었습니다.' : 'Fitbit 계정 연동에 실패했습니다.');
       setShowModal(true);
       // URL 파라미터 제거
       window.history.replaceState({}, document.title, window.location.pathname);
