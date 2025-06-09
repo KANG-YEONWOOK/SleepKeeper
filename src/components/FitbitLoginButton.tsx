@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 
 interface FitbitModalProps {
@@ -43,6 +43,23 @@ export default function FitbitLoginButton() {
   const [modalMessage, setModalMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const checkUrlParams = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+
+    if (status) {
+      setIsSuccess(status.includes('success'));
+      setModalMessage(status.includes('success') ? 'Fitbit 계정이 성공적으로 연동되었습니다.' : 'Fitbit 계정 연동에 실패했습니다.');
+      setShowModal(true);
+      // URL 파라미터 제거
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  };
+
+  useEffect(() => {
+    checkUrlParams();
+  }, []);
+
   const handleFitbitLogin = () => {
     const redirectUri = import.meta.env.VITE_FITBIT_REDIRECT_URI;
     const clientId = import.meta.env.VITE_FITBIT_CLIENT_ID;
@@ -54,20 +71,8 @@ export default function FitbitLoginButton() {
       return;
     }
 
-    // URL 파라미터에서 성공/실패 여부 확인
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status');
-
-    if (status) {
-      setIsSuccess(status.includes('success'));
-      setModalMessage(status.includes('success') ? 'Fitbit 계정이 성공적으로 연동되었습니다.' : 'Fitbit 계정 연동에 실패했습니다.');
-      setShowModal(true);
-      // URL 파라미터 제거
-      window.history.replaceState({}, document.title, window.location.pathname);
-    } else {
-      // Fitbit 인증 페이지로 리다이렉트
-      window.location.href = `https://2r3hmaxnj4.execute-api.eu-north-1.amazonaws.com/oauth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
-    }
+    // Fitbit 인증 페이지로 리다이렉트
+    window.location.href = `https://2r3hmaxnj4.execute-api.eu-north-1.amazonaws.com/oauth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
   };
 
   return (
