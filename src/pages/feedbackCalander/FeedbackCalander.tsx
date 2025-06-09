@@ -118,7 +118,10 @@ export default function FeedbackCalander() {
 
   const tileContent = ({ date }: { date: Date }) => {
     const dateStr = date.toISOString().split('T')[0];
-    const dayData = sleepData.find(data => data.sleep_date === dateStr);
+    const dayData = sleepData.find(data => {
+      const sleepDate = new Date(data.sleep_date);
+      return sleepDate.toISOString().split('T')[0] === dateStr;
+    });
     
     if (dayData) {
       return (

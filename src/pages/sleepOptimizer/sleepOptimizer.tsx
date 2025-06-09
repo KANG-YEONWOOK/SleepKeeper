@@ -3,8 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import './sleepOptimizer.css';
 
+interface OptimizerData {
+  updated_at: string;
+  target_temperature: number;
+  target_humidity: number;
+  description: string;
+}
+
 export default function SleepOptimizer() {
   const [feedback, setFeedback] = useState<string>('');
+  const [optimizerData, setOptimizerData] = useState<OptimizerData[]>([]);
+  const [currentDataIndex, setCurrentDataIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
@@ -25,22 +34,12 @@ export default function SleepOptimizer() {
       let data;
       try {
         data = JSON.parse(text);
-        // JSON 파싱 성공 시 content만 추출
         if (data && typeof data === 'object' && 'content' in data) {
-          console.log('Parsed content:', data.content);
           return data.content;
         }
       } catch {
-        console.log('Failed to parse JSON, using raw text:', text);
         return text;
       }
-
-      console.log('API Response:', {
-        status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries()),
-        data: data
-      });
 
       if (!response.ok) {
         throw new Error(data.body || '피드백 조회 실패');
@@ -53,23 +52,62 @@ export default function SleepOptimizer() {
     }
   };
 
+  const fetchOptimizerData = async (email: string, token: string): Promise<OptimizerData[]> => {
+    const response = await fetch('https://2r3hmaxnj4.execute-api.eu-north-1.amazonaws.com/data/optimizer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ email })
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(err);
+    }
+    return response.json();
+  };
+
   useEffect(() => {
-    const loadFeedback = async () => {
+    const loadData = async () => {
       if (!user?.email || !token) return;
       
       try {
         setIsLoading(true);
-        const data = await fetchLatestFeedback(user.email, token);
-        setFeedback(data);
+        const [feedbackData, optimizerData] = await Promise.all([
+          fetchLatestFeedback(user.email, token),
+          fetchOptimizerData(user.email, token)
+        ]);
+        setFeedback(feedbackData);
+        setOptimizerData(optimizerData);
+        setCurrentDataIndex(0);
       } catch (error) {
-        console.error('Failed to load feedback:', error);
+        console.error('Failed to load data:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadFeedback();
+    loadData();
   }, [user?.email, token]);
+
+  const handlePrevData = () => {
+    setCurrentDataIndex((prev) => (prev > 0 ? prev - 1 : prev));
+  };
+
+  const handleNextData = () => {
+    setCurrentDataIndex((prev) => (prev < optimizerData.length - 1 ? prev + 1 : prev));
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#223A61' }}>
@@ -98,7 +136,7 @@ export default function SleepOptimizer() {
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto pt-32 px-4">
+      <div className="max-w-2xl mx-auto pt-28 px-4">
         <h1 className="text-white text-2xl font-bold text-center mb-8">
           AI 피드백
         </h1>
@@ -110,19 +148,61 @@ export default function SleepOptimizer() {
               <p>피드백을 불러오는 중...</p>
             </div>
           ) : (
-            <div className="feedback-content">
-              {typeof feedback === 'string' ? (
-                feedback.split('\n').map((line, index) => (
-                  <p key={index} className="feedback-line">
-                    {line}
+            <>
+              <div className="feedback-content">
+                {typeof feedback === 'string' ? (
+                  feedback.split('\n').map((line, index) => (
+                    <p key={index} className="feedback-line">
+                      {line}
+                    </p>
+                  ))
+                ) : (
+                  <p className="feedback-line">
+                    {JSON.stringify(feedback, null, 2)}
                   </p>
-                ))
-              ) : (
-                <p className="feedback-line">
-                  {JSON.stringify(feedback, null, 2)}
-                </p>
+                )}
+              </div>
+
+              {optimizerData.length > 0 && (
+                <div className="optimizer-section">
+                  <div className="optimizer-header">
+                    <button 
+                      className="nav-button" 
+                      onClick={handleNextData}
+                      disabled={currentDataIndex === optimizerData.length - 1}
+                    >
+                      <img src="/backward.svg" alt="이전" />
+                    </button>
+                    <h3>최적화 데이터</h3>
+                    <button 
+                      className="nav-button" 
+                      onClick={handlePrevData}
+                      disabled={currentDataIndex === 0}
+                    >
+                      <img src="/forward.svg" alt="다음" />
+                    </button>
+                  </div>
+                  <div className="optimizer-content">
+                    <div className="optimizer-date">
+                      {formatDate(optimizerData[currentDataIndex].updated_at)}
+                    </div>
+                    <div className="optimizer-details">
+                      <div className="optimizer-item">
+                        <span className="label">최적 온도:</span>
+                        <span className="value">{optimizerData[currentDataIndex].target_temperature}°C</span>
+                      </div>
+                      <div className="optimizer-item">
+                        <span className="label">최적 습도:</span>
+                        <span className="value">{optimizerData[currentDataIndex].target_humidity}%</span>
+                      </div>
+                      <div className="optimizer-description">
+                        {optimizerData[currentDataIndex].description}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
-            </div>
+            </>
           )}
         </div>
       </div>

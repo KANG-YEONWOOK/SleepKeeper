@@ -91,8 +91,17 @@ export default function HomePage() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   const chartData = {
-    labels: sleepData.map(data => data.sleep_date),
+    labels: sleepData.map(data => formatDate(data.sleep_date)),
     datasets: [
       {
         label: selectedDataType === 'sleep_time' ? '수면 시간 (분)' : '수면 점수',
@@ -119,7 +128,7 @@ export default function HomePage() {
         borderColor: selectedDataType === 'sleep_time'
           ? 'rgb(81, 168, 222)'
           : 'rgba(153, 102, 255, 1)',
-        borderWidth: 1,
+        borderWidth: 0,
         borderRadius: 20,
         barPercentage: 0.3,
       }
@@ -298,7 +307,7 @@ export default function HomePage() {
                     <tbody>
                       {sleepData.map((data) => (
                         <tr key={data.sleep_id} className="border-t text-gray-700">
-                          <td className="text-xs py-2">{data.sleep_date}</td>
+                          <td className="text-xs py-2">{formatDate(data.sleep_date)}</td>
                           <td className="text-xs py-2">{data.total_sleep_minutes}분</td>
                           <td className="text-xs py-2">{data.sleep_score}점</td>
                         </tr>
