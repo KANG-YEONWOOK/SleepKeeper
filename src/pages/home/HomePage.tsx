@@ -14,6 +14,7 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import type { ChartOptions } from 'chart.js';
+import FitbitLoginButton from '../../components/FitbitLoginButton';
 
 ChartJS.register(
   CategoryScale,
@@ -229,7 +230,9 @@ export default function HomePage() {
             />
           </div>
 
-          <div className="w-10"></div>
+          <div className="flex items-center">
+            <FitbitLoginButton />
+          </div>
         </div>
       </header>
 
@@ -263,6 +266,10 @@ export default function HomePage() {
             ) : error ? (
               <p className="text-red-500 text-center">
                 {error}
+              </p>
+            ) : sleepData.length === 0 ? (
+              <p className="text-gray-500 text-center">
+                조회할 수면 데이터가 없습니다
               </p>
             ) : (
               <div className="flex flex-col items-center">
