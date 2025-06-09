@@ -60,7 +60,7 @@ export default function FitbitLoginButton() {
     const message = urlParams.get('message');
 
     if (status && message) {
-      setIsSuccess(status === 'success');
+      setIsSuccess(status.includes('success'));
       setModalMessage(message);
       setShowModal(true);
       // URL 파라미터 제거
