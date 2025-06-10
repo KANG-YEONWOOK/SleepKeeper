@@ -81,7 +81,7 @@ export default function FitbitLoginButton() {
         onClick={handleFitbitLogin} 
         className="bg-[#43909c] text-white rounded px-4 py-2 font-bold hover:bg-[#1a2d4b] transition-colors duration-200"
       >
-        Fitbit 계정 연동하기
+        Fitbit 연동
       </button>
       <FitbitModal
         isOpen={showModal}
